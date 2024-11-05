@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 
-import './Footer.css';
+import "./Footer.css";
 
 function Footer() {
   return (
@@ -8,7 +8,7 @@ function Footer() {
       <div className="content">
         <div>
           <div className="heading">
-            <p >POPULAR LOCATIONS</p>
+            <p>POPULAR LOCATIONS</p>
           </div>
           <div className="list">
             <ul>

@@ -1,7 +1,10 @@
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import {
   createUserWithEmailAndPassword,
+  onAuthStateChanged,
   signInWithEmailAndPassword,
+  signOut,
+  updateProfile,
 } from "firebase/auth";
 
 import { auth, db } from "../firebase";
@@ -10,7 +13,13 @@ import { toast } from "react-toastify";
 
 const AuthContext = createContext();
 
+
+
 export const AuthContextProvider = ({ children }) => {
+
+const [user, setUser]=useState(null);
+
+
   async function signUp(email, password, name, phone) {
     try {
       // Await createUserWithEmailAndPassword to get the user
@@ -23,6 +32,12 @@ export const AuthContextProvider = ({ children }) => {
       console.log("userCredential:", userCredential);
       console.log("user:", user);
 
+   // Set the display name
+   await updateProfile(user, {
+    displayName: name,
+  });
+
+
       // Await setDoc to save user details in Firestore
       await setDoc(doc(db, "users", user.uid), {
         name: name,
@@ -33,8 +48,14 @@ export const AuthContextProvider = ({ children }) => {
 
       console.log("User signed up and additional data saved successfully");
     } catch (error) {
-      console.log("errorCode:", error.code);
-      console.log("errorMessage:", error.message);
+      console.log("Sign-in error:", error.code, error.message);
+      if (error.code === 'auth/wrong-password') {
+        toast.error("Incorrect password!");
+      } else if (error.code === 'auth/user-not-found') {
+        toast.error("User not found!");
+      } else {
+        toast.error("Sign-in failed!");
+      }
     }
   }
 
@@ -49,8 +70,31 @@ export const AuthContextProvider = ({ children }) => {
     }
   }
 
+
+  async function logout() {
+    
+await signOut(auth).then(() => {
+  return;
+}).catch((error) => {
+  console.log("error when log out " + error.message);
+});
+  }
+
+
+
+  useEffect(() => {
+    // Listen for authentication state changes
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+
+    // Cleanup listener on component unmount
+    return () => unsubscribe();
+  });
+
+
   return (
-    <AuthContext.Provider value={{ signUp, signIn }}>
+    <AuthContext.Provider value={{ signUp, signIn, logout ,user}}>
       {children}
     </AuthContext.Provider>
   );

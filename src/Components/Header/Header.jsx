@@ -6,8 +6,22 @@ import Search from "../../assets/Search";
 import Arrow from "../../assets/Arrow";
 import SellButton from "../../assets/SellButton";
 import SellButtonPlus from "../../assets/SellButtonPlus";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { UserAuth } from "../../context/AuthContext";
+
+
 function Header() {
+const {user,logout}=UserAuth()
+const navigate = useNavigate();
+
+console.log("user from header",user);
+
+const handleLogout = async()=>{
+  await logout();
+  navigate('/');
+  
+}
+
   return (
     <div className="headerParentDiv">
       <div className="headerChildDiv">
@@ -35,12 +49,14 @@ function Header() {
           <Arrow></Arrow>
         </div>
         <div className="loginPage">
-          <Link to="/login">
-            <p>Login</p>
-          </Link>
+        <span>{user ? `Welcome ${user.displayName}` : <Link className='login_link' to='/login'>Login</Link>}</span>
+
           <hr />
         </div>
 
+        {user && <span className='logout_link' onClick={handleLogout}>Logout</span>}
+        
+<Link to='/add-post'>
         <div className="sellMenu">
           <SellButton></SellButton>
           <div className="sellMenuContent">
@@ -48,6 +64,7 @@ function Header() {
             <span>SELL</span>
           </div>
         </div>
+        </Link>
       </div>
     </div>
   );

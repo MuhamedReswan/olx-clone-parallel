@@ -1,9 +1,40 @@
-import React from 'react';
-
-import Heart from '../../assets/Heart';
-import './Post.css';
+import React, { useEffect, useState } from "react";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../../firebase"; // Adjust path to your Firebase configuration
+import Heart from "../../assets/Heart";
+import ProductDetail from "../Product Details/ProductDetail"; 
+import "./Post.css";
 
 function Posts() {
+  const [products, setProducts] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState(null); // Step 2: Manage selected product state
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const productsCollection = collection(db, "products");
+        const querySnapshot = await getDocs(productsCollection);
+        const productList = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        setProducts(productList);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  const handleCardClick = (product) => {
+    setSelectedProduct(product); // Set the selected product
+  };
+
+  const closeDetailModal = () => {
+    setSelectedProduct(null); // Clear the selected product
+  };
 
   return (
     <div className="postParentDiv">
@@ -13,49 +44,32 @@ function Posts() {
           <span>View more</span>
         </div>
         <div className="cards">
-          <div
-            className="card"
-          >
-            <div className="favorite">
-              <Heart></Heart>
+          {products.map((product) => (
+            <div className="card" key={product.id} onClick={() => handleCardClick(product)}>
+              <div className="favorite">
+                <Heart />
+              </div>
+              <div className="image">
+                <img src={product.imageUrl} alt={product.name} />
+              </div>
+              <div className="content">
+                <p className="rate">&#x20B9; {product.price}</p>
+                <span className="kilometer">{product.category}</span>
+                <p className="name">{product.name}</p>
+              </div>
+              <div className="date">
+                <span>
+                  {new Date(product.createdAt.seconds * 1000).toDateString()}
+                </span>
+              </div>
             </div>
-            <div className="image">
-              <img src="../../../Images/R15V3.jpg" alt="" />
-            </div>
-            <div className="content">
-              <p className="rate">&#x20B9; 250000</p>
-              <span className="kilometer">Two Wheeler</span>
-              <p className="name"> YAMAHA R15V3</p>
-            </div>
-            <div className="date">
-              <span>Tue May 04 2021</span>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
-      <div className="recommendations">
-        <div className="heading">
-          <span>Fresh recommendations</span>
-        </div>
-        <div className="cards">
-          <div className="card">
-            <div className="favorite">
-              <Heart></Heart>
-            </div>
-            <div className="image">
-              <img src="../../../Images/R15V3.jpg" alt="" />
-            </div>
-            <div className="content">
-              <p className="rate">&#x20B9; 250000</p>
-              <span className="kilometer">Two Wheeler</span>
-              <p className="name"> YAMAHA R15V3</p>
-            </div>
-            <div className="date">
-              <span>10/5/2021</span>
-            </div>
-          </div>
-        </div>
-      </div>
+
+      {selectedProduct && ( // Step 3: Render ProductDetail when a product is selected
+        <ProductDetail product={selectedProduct} onClose={closeDetailModal} />
+      )}
     </div>
   );
 }

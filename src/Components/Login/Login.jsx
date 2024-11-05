@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Logo from "../../olx-logo.png";
 import "./Login.css";
 import { UserAuth } from "../../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 
@@ -11,6 +11,7 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const location = useLocation();
   const navigate = useNavigate();
 
   const { signIn } = UserAuth();
@@ -27,9 +28,8 @@ function Login() {
         console.log("isComplete", isComplete);
         if (isComplete) {
           toast.success("Sign-In successful!");
-          setEmail("");
-          setPassword("");
-
+          const from = location.state?.from || '/dashboard'; 
+          navigate(from); 
           navigate("/");
         }
       }
