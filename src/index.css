@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.main-p{
+    @apply text-black mx-2 hover:text-teal-400
+}
+.footer-p-text{
+    @apply text-sm text-green-900 opacity-70 hover:opacity-100
+}

@@ -5,13 +5,21 @@ import Banner from '../Components/Banner/Banner';
 
 import Posts from '../Components/Posts/Posts';
 import Footer from '../Components/Footer/Footer';
+import TopBar from '../Components/Top Bar/TopBar';
+import Card from '../Components/Card/Card';
 
 function Home(props) {
   return (
-    <div className="homeParentDiv">
+    <div className="homeParentDiv ">
+
       <Header />
+      <TopBar/>
       <Banner />
-      <Posts />
+      {/* <Posts /> */}
+
+      <Card/>
+
+
       <Footer />
     </div>
   );

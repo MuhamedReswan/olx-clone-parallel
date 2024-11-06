@@ -9,11 +9,13 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import ProtectedRoute from "./Components/ProtectRoute/ProtectedRoute";
 import SingleProduct from "./Pages/SingleProduct";
+import PostContextProvider from "./context/PostContext";
 
 function App() {
   return (
     <>
       <AuthContextProvider>
+        <PostContextProvider>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
@@ -34,6 +36,7 @@ function App() {
           autoClose={3000}
           hideProgressBar={false}
         />
+        </PostContextProvider>
       </AuthContextProvider>
     </>
   );
