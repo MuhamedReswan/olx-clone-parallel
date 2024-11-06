@@ -46,6 +46,7 @@ const ProductDetails = () => {
     }
   }, [product?.userId]);
   console.log("sellerData",sellerData);
+  console.log("produst------------",sellerData);
 
   return (
     <main className="mt-[100px] max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 md:grid-cols-3 gap-6 bg-gray-100 rounded-lg">
@@ -89,7 +90,7 @@ const ProductDetails = () => {
 
           <p className="text-gray-600"></p>
           <div className="flex justify-between mt-4 text-sm text-gray-500">
-            <span>{product.place ? product.place  :"Kulukkallur, Palakkad, Kerala"}</span>
+            <span>{product.address ? product.address  :"Kulukkallur, Palakkad, Kerala"}</span>
             <span>Today</span>
           </div>
         </div>
@@ -113,7 +114,7 @@ const ProductDetails = () => {
 
         <div className="bg-white p-4 rounded-lg">
           <h3 className="text-xl font-semibold mb-4">Posted in</h3>
-          <p className="text-gray-600">{product.place ? product.place  :"Kulukkallur, Palakkad, Kerala"}</p>
+          <p className="text-gray-600">{product.address ? product.address  :"Kulukkallur, Palakkad, Kerala"}</p>
         </div>
       </div>
     </main>

@@ -12,7 +12,7 @@ import Loading from "./Components/Loading/Loading";
 const Home = lazy(() => import("./Pages/Home"));
 const Login = lazy(() => import("./pages/Login"));
 const Signup = lazy(() => import("./Pages/Signup"));
-const Create = lazy(() => import("./Components/Create/Create"));
+const Create = lazy(() => import("./pages/Create"));
 const SingleProduct = lazy(() => import("./Pages/SingleProduct"));
 
 function App() {
