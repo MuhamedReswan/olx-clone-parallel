@@ -1,100 +1,119 @@
-
-
-import React from 'react';
+import React, { useEffect, useState } from "react";
 // Lucide Icons
-import { Share2, Heart, ChevronDown } from 'lucide-react';
+import { Share2, Heart, ChevronDown } from "lucide-react";
 // React Icons
-import { FaShare, FaHeart, FaChevronDown } from 'react-icons/fa';
-import { ProductAuth } from '../../context/PostContext';
+import { FaShare, FaHeart, FaChevronDown, FaRegUserCircle } from "react-icons/fa";
+import { ProductAuth } from "../../context/PostContext";
+import { toast } from "react-toastify";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../firebase";
 
 const ProductDetails = () => {
+  const { product } = ProductAuth();
+  const [sellerData, setSellerData] = useState(null);
 
-const {product}=ProductAuth();
+
+
+  const fetchUserData = async (userId) => {
+    try {
+      const userRef = doc(db, "users", userId);
+      const userSnap = await getDoc(userRef);
+  
+      if (userSnap.exists()) {
+        const userData = userSnap.data();
+        console.log("User Data:", userData);
+        return userData;
+      } else {
+        toast.error("User not found.");
+      }
+    } catch (error) {
+      console.log("Error fetching user data:", error);
+      toast.error("Failed to fetch user data.");
+    }
+  };
+
+  
+  useEffect(() => {
+    if (product?.userId) {
+      const fetchSellerData = async () => {
+        const data = await fetchUserData(product.userId);
+        if (data) {
+          setSellerData(data); 
+        }
+      };
+  
+      fetchSellerData();
+    }
+  }, [product?.userId]);
+  console.log("sellerData",sellerData);
 
   return (
     <main className="mt-[100px] max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 md:grid-cols-3 gap-6 bg-gray-100 rounded-lg">
-      {/* Image Section */}
-      <div className="md:col-span-2 bg-black rounded-lg overflow-hidden">
+      <div className="md:col-span-2 bg-black bg-opacity-50 rounded-lg overflow-hidden my-auto">
         <img
           src={product.imageUrl}
           alt="iPhone"
           className="w-full h-[480px] object-contain"
         />
-        <div className="bg-black bg-opacity-50 text-white px-4 py-2 text-sm flex justify-between">
-          <span>Click to zoom</span>
-          <span>1/1</span>
-        </div>
+    
       </div>
 
-      {/* Details Section */}
       <div className="space-y-4">
-        {/* Price Section */}
         <div className="bg-white p-4 rounded-lg">
           <div className="flex justify-between items-center mb-4">
             <div>
-            <h1 className="text-4xl font-bold">₹ {product?.price }</h1>
-<h1 className='text-3xl'>{product.name}</h1>
-<p className='pt-1'>{product.category}</p>
-<p className='pt-1'>{product.description}</p>
+              <h1 className="text-4xl font-bold">₹ {product?.price}</h1>
+              <h1 className="text-3xl">{product.name}</h1>
+              <p className="pt-1">{product.category}</p>
+              <p className="pt-1">{product.description}</p>
             </div>
-            
-            {/* Example using Lucide Icons */}
+
             <div className="flex justify-start gap-2">
               <button className="hover:bg-gray-100 p-2 rounded-full">
-                <Share2 className="h-6 w-6" /> {/* Lucide Icon */}
+                <Share2 className="h-6 w-6" />
               </button>
               <button className="hover:bg-gray-100 p-2 rounded-full">
-                <Heart className="h-6 w-6" /> {/* Lucide Icon */}
+                <Heart className="h-6 w-6" />
               </button>
             </div>
 
-            {/* Example using React Icons */}
             <div className="flex gap-2">
               <button className="hover:bg-gray-100 p-2 rounded-full">
-                <FaShare size={24} /> {/* React Icon */}
+                <FaShare size={24} />
               </button>
               <button className="hover:bg-gray-100 p-2 rounded-full">
-                <FaHeart size={24} /> {/* React Icon */}
+                <FaHeart size={24} />
               </button>
             </div>
           </div>
-          
-          <p className="text-gray-600">
-            {/* Neet and good condition One year I care plus guaranty
-             */}
-          </p>
+
+          <p className="text-gray-600"></p>
           <div className="flex justify-between mt-4 text-sm text-gray-500">
-            <span>Kulukkallur, Palakkad, Kerala</span>
+            <span>{product.place ? product.place  :"Kulukkallur, Palakkad, Kerala"}</span>
             <span>Today</span>
           </div>
         </div>
 
-        {/* Seller Section */}
         <div className="bg-white p-4 rounded-lg">
           <div className="flex items-center gap-4 mb-4">
-            <img
-              src="/api/placeholder/48/48"
-              alt="Seller"
-              className="w-12 h-12 rounded-full"
-            />
-            
+
+<FaRegUserCircle className="h-9 w-9" />
             <div>
-              <h2 className="text-xl font-semibold">User</h2>
-              <span className="text-gray-500">Member since Apr 2021</span>
+            <h2 className="text-xl font-semibold">
+  {sellerData ? sellerData.name : "Loading..."}
+</h2>              <span className="text-gray-500">Member since nov 2024</span>
             </div>
-            {/* You can use either icon here */}
-            <ChevronDown className="h-5 w-5 ml-auto" /> {/* Lucide Icon */}
-            <FaChevronDown className="h-5 w-5 ml-auto" /> {/* React Icon */}
+
+            <FaChevronDown className="h-5 w-5 ml-auto" />
           </div>
           <button className="w-full py-3 border-2 border-[#002f34] rounded font-semibold hover:bg-gray-50">
             Chat with seller
           </button>
         </div>
 
-        {/* Posted Location */}
         <div className="bg-white p-4 rounded-lg">
           <h3 className="text-xl font-semibold mb-4">Posted in</h3>
-          <p className="text-gray-600">Kulukkallur, Palakkad, Kerala</p>
+          <p className="text-gray-600">{product.place ? product.place  :"Kulukkallur, Palakkad, Kerala"}</p>
         </div>
       </div>
     </main>

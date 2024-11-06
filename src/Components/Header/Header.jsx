@@ -77,6 +77,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import { IoSearch } from "react-icons/io5";
 import { UserAuth } from "../../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
+import { FiShoppingCart } from "react-icons/fi";
 
 const Header = () => {
   const { user, logout } = UserAuth();
@@ -125,7 +126,8 @@ const Header = () => {
           <p className="text-sm sm:text-base">ENGLISH</p>
           <IoIosArrowDown className="absolute h-5 w-5 sm:h-6 sm:w-6 top-1/2 transform -translate-y-1/2 left-[4rem] sm:left-[5rem]" />
         </div>
-        <div className="font-semibold ml-3 sm:ml-6 flex justify-between">
+        <div className=" relativefont-semibold ml-3 sm:ml-6 flex justify-between">
+        {user ? <FiShoppingCart className="w-7 h-7 my-auto mr-6 " /> : ""}
           <p className=" text-sm sm:text-base flex justify-center items-center flex-col text-center">
             {user ? (
               <>

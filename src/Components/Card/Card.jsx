@@ -52,14 +52,14 @@ return (
               className="relative p-4 border-2 border-black rounded-md bg-gray-100"
               onClick={()=>handleClick(product)}
             >
-              <div className="mx-auto">
+              <div className="mx-auto relative">
                 <img
                   className="m-3 max-w-60"
                   src={product.imageUrl}
                   alt={product.name}
                 />
-                <FaCircle className="absolute top-4 right-7 w-9 h-9 text-white" />
-                <FaRegHeart className="absolute top-6 right-9 w-5 h-5" />
+                <FaCircle className="absolute top-3 right-8 w-9 h-9 text-white" />
+                <FaRegHeart className="absolute top-5 right-10 w-5 h-5" />
               </div>
               <div className="ps-5 pb-3 text-start m-auto">
                 <h2 className="font-bold">${product.price}.00</h2>
