@@ -8,6 +8,7 @@ import { AuthContextProvider } from "./context/AuthContext";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import ProtectedRoute from "./Components/ProtectRoute/ProtectedRoute";
+import SingleProduct from "./Pages/SingleProduct";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/single-product" element={<SingleProduct />} />
           <Route
             path="/add-post"
             element={

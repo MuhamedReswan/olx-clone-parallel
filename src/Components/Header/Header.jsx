@@ -45,7 +45,7 @@ const handleLogout = async()=>{
           </div>
         </div>
         <div className="language">
-          <span> ENGLISH </span>
+          <span > ENGLISH </span>
           <Arrow></Arrow>
         </div>
         <div className="loginPage">
